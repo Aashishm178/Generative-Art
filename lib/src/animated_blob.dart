@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:generative_art/src/particle.dart';
 import 'package:generative_art/utils/utils.dart' as utils;
-import 'dart:math' as math;
 
 class AnimatedBlob extends StatefulWidget {
   final Widget child;
@@ -52,7 +51,8 @@ class _AnimatedBlobState extends State<AnimatedBlob>
                           utils.randomNumber(widget.height)),
                       color: widget.particleColor ?? utils.randomColor(),
                       speed: widget.speed ?? utils.randomNumber(2.0),
-                      theta: widget.theta ?? utils.randomNumber(2.0) * math.pi,
+                      theta: widget.theta ??
+                          utils.randomNumber(2.0) * utils.getPie(),
                       radius: widget.radius ?? utils.randomNumber(2.0),
                     ),
                   ));

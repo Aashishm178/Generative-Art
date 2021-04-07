@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 const double minRadius = 1.0;
 Random _random = Random();
 
+double getPie() => pi;
+
 Offset displacement(double speed, double theta) =>
     Offset(speed * cos(theta), speed * sin(theta));
 
-double degreeToRadian(double degree) => (degree / 180) * pi;
+double degreeToRadian(double degree) => (degree / 180) * getPie();
 
 double randomNumber(double maxLimit) =>
     _random.nextDouble() * (maxLimit - minRadius) + minRadius;

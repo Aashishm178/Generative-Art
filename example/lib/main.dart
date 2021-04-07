@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:generative_art/generative_art.dart';
 
 void main() {
@@ -21,8 +18,9 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Text(''),
+        body: AnimatedRing(
+          noOfRings: 100,
+          child: Container(),
         ),
       ),
     );
