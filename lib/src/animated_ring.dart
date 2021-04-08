@@ -46,28 +46,23 @@ class _AnimatedRingState extends State<AnimatedRing>
                         color: widget.color ?? utils.randomColor(),
                         speed: widget.speed ?? utils.randomNumber(2),
                         radius: widget.minRadius ?? utils.randomNumber(5),
-                        maxRadius: widget.maxRadius ?? utils.randomNumber(25),
+                        maxRadius:
+                            widget.maxRadius ?? utils.randomNumberTwo(25, 20),
                         offset: widget.startPosition ??
                             Offset(utils.randomNumber(1000),
                                 utils.randomNumber(1000)),
                       )));
             }
             _particles.forEach((element) {
-              double newRadius =
-                  element.radius + _stepper(element.radius, element.maxRadius);
-              if (newRadius >= element.maxRadius ||
-                  element.maxRadius - newRadius < 0.5) {
-                _particles.remove(element);
-                _particles.add(RingParticle(
-                  color: element.color ?? utils.randomColor(),
-                  speed: element.speed ?? utils.randomNumber(5),
-                  radius: element.radius ?? utils.randomNumber(5),
-                  maxRadius: element.maxRadius ?? utils.randomNumber(10),
-                  offset: Offset(
-                    utils.randomNumber(1000),
-                    utils.randomNumber(1000),
-                  ),
-                ));
+              if (element.radius / element.maxRadius < 0.9) {
+                element.radius += _stepper(element.radius, element.maxRadius);
+              } else {
+                print('RESETTING');
+                element.offset =
+                    Offset(utils.randomNumber(1000), utils.randomNumber(1000));
+                element.radius = utils.randomNumber(5);
+                element.color = utils.randomColor();
+                element.maxRadius = utils.randomNumberTwo(20, 25);
               }
             });
           });
@@ -103,21 +98,16 @@ double _stepper(double min, double max) {
 
 class RingPainter extends CustomPainter {
   List<RingParticle> particles;
-  RingPainter({this.particles});
+  RingPainter({
+    this.particles,
+  });
   @override
   void paint(Canvas canvas, Size size) {
-    //Updation
-    particles.forEach((element) {
-      if (element.radius < element.maxRadius) {
-        element.radius += _stepper(element.radius, element.maxRadius);
-      }
-    });
-
     //Inflation
     particles.forEach((element) {
       Paint paint = Paint()
         ..color = element.color
-        ..strokeWidth = 1.0
+        ..strokeWidth = (1.0 * (element.maxRadius / element.radius))
         ..style = PaintingStyle.stroke;
       canvas.drawCircle(element.offset, element.radius, paint);
     });
@@ -128,7 +118,7 @@ class RingPainter extends CustomPainter {
 }
 
 class RingParticle extends Particle {
-  final double maxRadius;
+  double maxRadius;
   RingParticle({
     Color color,
     Offset center,
